@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="libs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/disruptor-3.3.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jna-platform-4.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jna.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

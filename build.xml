@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<project name="DisruptorLatency" basedir="." default="main">
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir" value="${build.dir}/jar"/>
+
+    <property name="main-class" value="aa.Main"/>
+
+    <path id="classpath">
+        <fileset dir="lib" includes="**/*.jar"/>
+    </path>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="jar">
+        <java classname="${main-class}" fork="true">
+            <classpath>
+                <path refid="classpath"/>
+                <path location="${jar.dir}/${ant.project.name}.jar"/>
+            </classpath>
+            <jvmarg value="-verbose:gc"/>
+            <jvmarg value="-XX:+UnlockDiagnosticVMOptions"/>
+            <jvmarg value="-XX:GuaranteedSafepointInterval=300000"/>
+            <jvmarg value="-XX:CompileThreshold=1"/>
+            <jvmarg value="-XX:-TieredCompilation"/>
+            <!--<jvmarg value="-XX:+PrintCompilation"/>-->
+            <!--<jvmarg value="-XX:+PrintFlagsFinal"/>-->
+            <jvmarg value="-XX:+PrintGCApplicationStoppedTime"/>
+            <jvmarg value="-XX:+PrintGCApplicationConcurrentTime"/>
+            <jvmarg value="-XX:PrintSafepointStatisticsCount=1"/>
+            <jvmarg value="-XX:+PrintSafepointStatistics"/>
+            <jvmarg value="-XX:+UseLargePages"/>
+            <jvmarg value="-XX:LargePageSizeInBytes=2m"/>
+        </java>
+    </target>
+
+    <target name="main" depends="clean, run"/>
+</project>
